@@ -31,7 +31,7 @@ if __name__ == '__main__':
     print(f'{constants.USER_NODE_FILES_MODULE}.{node_main_path[0]}')
     node_main = getattr(importlib.import_module(f'{constants.USER_NODE_FILES_MODULE}.{node_main_path[0]}'),
                         node_main_path[-1])
-    nid_mappings = yaml.load(open(constants.NODE_ADDRESSES_FILE_PATH, 'r'))
+    nid_mappings = yaml.load(open(constants.NODE_ADDRESSES_FILE_PATH, 'r'),  Loader=yaml.FullLoader)
 
     nid_manager = NidManager(nid_mappings)
     network_adapter = NetworkAdapter(port=args.port, nid_manager=nid_manager)
