@@ -28,7 +28,6 @@ if __name__ == '__main__':
     args = parser.parse_args()
     peer_nids = args.peer_nids.split(constants.PEER_NID_SEPARATOR)
     node_main_path = args.node_main_function.rpartition(constants.PYTHON_PATH_SEPARATOR)
-    print(f'{constants.USER_NODE_FILES_MODULE}.{node_main_path[0]}')
     node_main = getattr(importlib.import_module(f'{constants.USER_NODE_FILES_MODULE}.{node_main_path[0]}'),
                         node_main_path[-1])
     nid_mappings = yaml.load(open(constants.NODE_ADDRESSES_FILE_PATH, 'r'),  Loader=yaml.FullLoader)
