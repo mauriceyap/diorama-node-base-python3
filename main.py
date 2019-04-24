@@ -8,6 +8,7 @@ import constants
 from NetworkAdapter import NetworkAdapter
 from NidManager import NidManager
 from Node import Node
+from Storage import Storage
 
 parser = argparse.ArgumentParser()
 parser.add_argument('peer_nids',
@@ -45,5 +46,6 @@ if __name__ == '__main__':
     nid_manager = NidManager(nid_mappings)
     network_adapter = NetworkAdapter(port=args.port, nid_manager=nid_manager, send_success_rates=send_success_rates,
                                      send_delays=send_delays)
-    node = Node(peer_nids, args.nid, network_adapter, node_main)
+    storage = Storage()
+    node = Node(peer_nids, args.nid, network_adapter, node_main, storage)
     node.run()
