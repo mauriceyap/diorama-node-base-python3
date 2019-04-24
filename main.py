@@ -30,9 +30,20 @@ if __name__ == '__main__':
     node_main_path = args.node_main_function.rpartition(constants.PYTHON_PATH_SEPARATOR)
     node_main = getattr(importlib.import_module(f'{constants.USER_NODE_FILES_MODULE}.{node_main_path[0]}'),
                         node_main_path[-1])
-    nid_mappings = yaml.load(open(constants.NODE_ADDRESSES_FILE_PATH, 'r'),  Loader=yaml.FullLoader)
+    nid_mappings = yaml.load(open(constants.NODE_ADDRESSES_FILE_PATH, 'r'), Loader=yaml.FullLoader)
+    connection_parameters = yaml.load(open(constants.CONNECTION_PARAMETERS_FILE_PATH, 'r'),
+                                      Loader=yaml.FullLoader)[args.nid]
+    send_success_rates = {nid: connection_parameters[nid][constants.NODE_CONNECTIONS_PARAMETERS_SUCCESS_RATE]
+                          for nid in connection_parameters}
+    send_delays = {
+        nid: {
+            'distribution': connection_parameters[nid][constants.NODE_CONNECTIONS_PARAMETERS_DELAY_DISTRIBUTION],
+            'params': connection_parameters[nid][constants.NODE_CONNECTIONS_PARAMETERS_DELAY_DISTRIBUTION_PARAMETERS]
+        }
+        for nid in connection_parameters}
 
     nid_manager = NidManager(nid_mappings)
-    network_adapter = NetworkAdapter(port=args.port, nid_manager=nid_manager)
+    network_adapter = NetworkAdapter(port=args.port, nid_manager=nid_manager, send_success_rates=send_success_rates,
+                                     send_delays=send_delays)
     node = Node(peer_nids, args.nid, network_adapter, node_main)
     node.run()
