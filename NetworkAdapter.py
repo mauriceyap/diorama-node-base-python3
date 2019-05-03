@@ -1,11 +1,11 @@
 from threading import Timer
 import random
 import math
+import socket
 
 from scipy.stats import uniform, norm, gamma, expon, cauchy, beta, triang
 
 import constants
-import socket
 
 
 def get_triangle_delay(params):
