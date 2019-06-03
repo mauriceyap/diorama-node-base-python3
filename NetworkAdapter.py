@@ -28,14 +28,19 @@ delay_variables = {
 
 
 class NetworkAdapter:
-    def __init__(self, port, nid_manager, send_success_rates, send_delays):
+    def __init__(self, port, nid_manager, send_success_rates, send_delays, peer_nids):
         self.send_delays = send_delays
         self.nid_manager = nid_manager
         self.send_success_rates = send_success_rates
+        self.peer_nids = peer_nids
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         self.socket.bind(("", port))
 
     def send(self, message, nid):
+        if nid not in self.peer_nids:
+            print(f"I tried to send a message to {nid}, but that nid doesn't belong to a node I'm connected to")
+            return
+
         is_failed_send = random.random() > self.send_success_rates[nid] if nid in self.send_success_rates else False
         if is_failed_send:
             return
